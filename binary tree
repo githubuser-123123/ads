@@ -1,0 +1,129 @@
+// binary tree 
+
+#include <stdio.h> #include <stdlib.h> #include <malloc.h> #include<math.h>
+struct node
+{
+int data;
+struct node *left;
+struct node *right; } *root;
+int max(int a,int b) {
+if(a>b) return a; else return b;
+}
+void create() {
+char ch = 'y';
+int data;
+char cho;
+struct node *temp, *q;
+if (root == NULL) {
+printf("Enter the data which you want to add at root : \n"); scanf("%d", &data);
+ temp = (struct node*)malloc(sizeof(struct node)); temp->data = data;
+temp->left = NULL;
+temp->right = NULL;
+root = temp; }
+else
+{
+while (ch != 'n') {
+printf("Enter the data which you want to add at root : \n"); scanf("%d", &data);
+fflush(stdin);
+q = root;
+temp = (struct node *)malloc(sizeof(struct node)); temp->data = data;
+temp->left = NULL;
+temp->right = NULL;
+while (1) {
+printf("Enter on which side of %d you want to add new number : \n", q->data); printf("press 'l' for left and 'r' for right \n");
+scanf("%c", &cho);
+fflush(stdin);
+if (cho == 'l') {
+if (q->left == NULL) {
+q->left = temp;
+break; }
+q = q->left; }
+else if (cho == 'r') {
+if (q->right == NULL) {
+q->right = temp;
+break; }
+q = q->right; }
+else
+{
+printf("Invalide Input\n");
+
+ } }
+printf("Do You want to add one more node in tree : \nPress 'y' to continue and press 'n' for Exit ");
+scanf("%c", &ch); }
+} }
+void preorder(struct node *root) {
+if (root == NULL) {
+return; }
+else{
+printf("%d ",root->data); preorder(root->left); preorder(root->right);
+} }
+void Inorder(struct node *root) {
+if (root == NULL) {
+return; }
+else{ Inorder(root->left); printf("%d ",root->data); Inorder(root->right);
+} }
+void postorder(struct node *root) {
+if (root == NULL) {
+return; }
+else{ postorder(root->left); postorder(root->right); printf("%d ",root->data);
+} }
+
+ int height(struct node *root) {
+if(root==NULL) {
+return 0; }
+else
+{
+return max( height(root->left) , height(root->right))+1;
+} }
+void Leafnode(struct node *root) {
+if(root==NULL) {
+return; }
+if(root->left==NULL && root->right==NULL) {
+printf("%d ",root->data);
+return; }
+if(root->left) Leafnode(root->left);
+if(root->right) Leafnode(root->right);
+}
+int count(struct node *root) {
+if(root==NULL) {
+return 0; }
+else
+{
+return count(root->left) + count(root->right)+1;
+} }
+void mirror(struct node *root) {
+
+ if(root==NULL) {
+return; }
+else
+{
+struct node *temp; mirror(root->left); mirror(root->right);
+temp=root->left; root->left=root->right; root->right=temp;
+} }
+int main() {
+root = NULL; int a;
+int d;
+int h;
+while (1) {
+printf("Choose operation on tree : \n");
+printf("1)Create \n2)Preorder\n3)Inorder\n4)Postorder\n5)Height\n6)Leaf Node\n7)Count Number of Nodes\n8)Mirror Image\n9)Exit");
+scanf("%d", &a); switch (a)
+{
+case 1:
+create(); break;
+case 2: preorder(root); printf("\n"); break;
+case 3: Inorder(root); printf("\n"); break;
+case 4: postorder(root); printf("\n"); break;
+
+case 5:
+h=height(root);
+printf("Height of root = %d\n",h); break;
+case 6: Leafnode(root); printf("\n"); break;
+case 7:
+printf("Number of Node = %d\n",count(root)); break;
+case 8: mirror(root); break;
+case 9: exit(0); break;
+default:
+printf("Invalide Input!\n");
+} }
+return 0; }
