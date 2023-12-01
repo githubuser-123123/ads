@@ -1,0 +1,145 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Structure for a key-value pair
+typedef struct KeyValue {
+    char* key;
+    int value;
+    struct KeyValue* next; // Pointer to the next node for chaining
+} KeyValue;
+
+// Structure for the hash table
+typedef struct HashTable {
+    int size;
+    KeyValue** table; // Array of pointers to KeyValue nodes
+} HashTable;
+
+// Function to create a new key-value node
+KeyValue* createNode(char* key, int value) {
+    KeyValue* newNode = (KeyValue*)malloc(sizeof(KeyValue));
+    newNode->key = strdup(key); // Duplicate the key to avoid memory issues
+    newNode->value = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to create a new hash table
+HashTable* createHashTable(int size) {
+    HashTable* hashTable = (HashTable*)malloc(sizeof(HashTable));
+    hashTable->size = size;
+    
+    // Allocate memory for the array of pointers
+    hashTable->table = (KeyValue**)malloc(size * sizeof(KeyValue*));
+    
+    // Initialize each pointer to NULL
+    for (int i = 0; i < size; i++) {
+        hashTable->table[i] = NULL;
+    }
+
+    return hashTable;
+}
+
+// Function to calculate the hash value for a key
+int hash(char* key, int size) {
+    unsigned int hashValue = 0;
+    for (int i = 0; key[i] != '\0'; i++) {
+        hashValue = hashValue * 31 + key[i];
+    }
+    return hashValue % size;
+}
+
+// Function to insert a key-value pair into the hash table
+void insert(HashTable* hashTable, char* key, int value) {
+    int index = hash(key, hashTable->size);
+    
+    // Check if the key already exists in the chain
+    KeyValue* current = hashTable->table[index];
+    while (current != NULL) {
+        if (strcmp(current->key, key) == 0) {
+            // Key found, update the value and return
+            current->value = value;
+            return;
+        }
+        current = current->next;
+    }
+
+    // Key not found, insert a new node at the beginning of the chain
+    KeyValue* newNode = createNode(key, value);
+    newNode->next = hashTable->table[index];
+    hashTable->table[index] = newNode;
+}
+
+// Function to search for a key in the hash table and return its value
+int search(HashTable* hashTable, char* key) {
+    int index = hash(key, hashTable->size);
+
+    // Search for the key in the chain
+    KeyValue* current = hashTable->table[index];
+    while (current != NULL) {
+        if (strcmp(current->key, key) == 0) {
+            // Key found, return its value
+            return current->value;
+        }
+        current = current->next;
+    }
+
+    // Key not found
+    return -1;
+}
+
+// Function to print the hash table
+void printHashTable(HashTable* hashTable) {
+    for (int i = 0; i < hashTable->size; i++) {
+        printf("[%d]: ", i);
+        KeyValue* current = hashTable->table[i];
+        while (current != NULL) {
+            printf("(%s, %d) ", current->key, current->value);
+            current = current->next;
+        }
+        printf("\n");
+    }
+}
+
+// Function to free the memory used by the hash table
+void freeHashTable(HashTable* hashTable) {
+    for (int i = 0; i < hashTable->size; i++) {
+        KeyValue* current = hashTable->table[i];
+        while (current != NULL) {
+            KeyValue* next = current->next;
+            free(current->key);
+            free(current);
+            current = next;
+        }
+    }
+    free(hashTable->table);
+    free(hashTable);
+}
+
+// Main function for testing the hash table
+int main() {
+    HashTable* hashTable = createHashTable(10);
+
+    insert(hashTable, "key1", 42);
+    insert(hashTable, "key2", 17);
+    insert(hashTable, "key3", 99);
+
+    printf("Initial Hash Table:\n");
+    printHashTable(hashTable);
+
+    // Update the value for an existing key
+    insert(hashTable, "key2", 88);
+
+    printf("\nHash Table after updating 'key2':\n");
+    printHashTable(hashTable);
+
+    // Search for keys
+    printf("\nValue for 'key1': %d\n", search(hashTable, "key1"));
+    printf("Value for 'key2': %d\n", search(hashTable, "key2"));
+    printf("Value for 'key3': %d\n", search(hashTable, "key3"));
+    printf("Value for 'key4': %d\n", search(hashTable, "key4"));
+
+    freeHashTable(hashTable);
+
+    return 0;
+}
