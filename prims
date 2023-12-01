@@ -1,0 +1,132 @@
+// prims
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure to represent an edge in the graph
+struct Edge {
+    int src, dest, weight;
+};
+
+// Structure to represent a graph
+struct Graph {
+    int V, E; // Number of vertices and edges
+    struct Edge* edge; // Array of edges
+};
+
+// Function to create a graph with V vertices and E edges
+struct Graph* createGraph(int V, int E) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->V = V;
+    graph->E = E;
+    graph->edge = (struct Edge*)malloc(E * sizeof(struct Edge));
+    return graph;
+}
+
+// Function to add an edge to the graph
+void addEdge(struct Graph* graph, int src, int dest, int weight) {
+    graph->edge[graph->E].src = src;
+    graph->edge[graph->E].dest = dest;
+    graph->edge[graph->E].weight = weight;
+    graph->E++;
+}
+
+// Function to display the graph
+void displayGraph(struct Graph* graph) {
+    int i;
+    for (i = 0; i < graph->E; i++) {
+        printf("(%d - %d) Weight: %d\n", graph->edge[i].src, graph->edge[i].dest, graph->edge[i].weight);
+    }
+}
+
+// Function to implement Prim's algorithm using adjacency matrix
+void primMatrix(struct Graph* graph);
+
+// Function to implement Kruskal's algorithm using adjacency matrix
+void kruskalMatrix(struct Graph* graph);
+
+// Function to implement Prim's algorithm using adjacency list
+void primList(struct Graph* graph);
+
+// Function to implement Kruskal's algorithm using adjacency list
+void kruskalList(struct Graph* graph);
+
+int main() {
+    int choice, V, E, i, src, dest, weight;
+    printf("Enter the number of vertices: ");
+    scanf("%d", &V);
+    printf("Enter the number of edges: ");
+    scanf("%d", &E);
+
+    struct Graph* graphMatrix = createGraph(V, E);
+    struct Graph* graphList = createGraph(V, E);
+
+    printf("Enter the edges (src dest weight) for the graph:\n");
+    for (i = 0; i < E; i++) {
+        scanf("%d %d %d", &src, &dest, &weight);
+        addEdge(graphMatrix, src, dest, weight);
+        addEdge(graphList, src, dest, weight);
+    }
+
+    do {
+        printf("\nMENU:\n");
+        printf("1. Prim's Algorithm (Adjacency Matrix)\n");
+        printf("2. Kruskal's Algorithm (Adjacency Matrix)\n");
+        printf("3. Prim's Algorithm (Adjacency List)\n");
+        printf("4. Kruskal's Algorithm (Adjacency List)\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                primMatrix(graphMatrix);
+                break;
+            case 2:
+                kruskalMatrix(graphMatrix);
+                break;
+            case 3:
+                primList(graphList);
+                break;
+            case 4:
+                kruskalList(graphList);
+                break;
+            case 5:
+                printf("Exiting program.\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    } while (choice != 5);
+
+    free(graphMatrix->edge);
+    free(graphMatrix);
+    free(graphList->edge);
+    free(graphList);
+
+    return 0;
+}
+
+// Function to implement Prim's algorithm using adjacency matrix
+void primMatrix(struct Graph* graph) {
+    // TODO: Implement Prim's algorithm using adjacency matrix
+    printf("Prim's Algorithm (Adjacency Matrix) not implemented yet.\n");
+}
+
+// Function to implement Kruskal's algorithm using adjacency matrix
+void kruskalMatrix(struct Graph* graph) {
+    // TODO: Implement Kruskal's algorithm using adjacency matrix
+    printf("Kruskal's Algorithm (Adjacency Matrix) not implemented yet.\n");
+}
+
+// Function to implement Prim's algorithm using adjacency list
+void primList(struct Graph* graph) {
+    // TODO: Implement Prim's algorithm using adjacency list
+    printf("Prim's Algorithm (Adjacency List) not implemented yet.\n");
+}
+
+// Function to implement Kruskal's algorithm using adjacency list
+void kruskalList(struct Graph* graph) {
+    // TODO: Implement Kruskal's algorithm using adjacency list
+    printf("Kruskal's Algorithm (Adjacency List) not implemented yet.\n");
+}
