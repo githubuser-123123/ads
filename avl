@@ -373,5 +373,34 @@ int main() {
         printf("\nAVL Tree Operations:\n");
         printf("1. Insert a key\n");
         printf("2. Delete a key\n");
-        printf("3. Print AVL Tree
+        printf("3. Print AVL Tree");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
+        switch (choice) {
+            case 1:
+                printf("Enter key to insert: ");
+                scanf("%d", &key);
+                root = insert(root, key);
+                break;
+            case 2:
+                printf("Enter key to delete: ");
+                scanf("%d", &key);
+                root = deleteNode(root, key);
+                break;
+            case 3:
+                printf("AVL Tree:\n");
+                printAVLTree(root, 0);
+                break;
+            case 4:
+                printf("Exiting program.\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+
+    } while (choice != 4);
+
+    return 0;
+}
